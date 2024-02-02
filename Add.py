@@ -1,18 +1,33 @@
 from sense_hat import SenseHat
 from time import sleep
+import pandas as pd
 
-sense = SenseHat()
-Dic1 = ["Agua", 12, 2]
-Dic2 = ["Culo", 23, 7]
-apagar = False
+def Add(objeto, cantidad, data):      #Funcion para añadir objetos 
+    counter = 0
+    add = True
+    for i in steve_pixels:      #Recorro todos los valores
+        if i[0] == 0 and i[1] != 0 and add == True:     #Si hay un verde
+            steve_pixels[counter] = R   #Lo pongo en rojo
+            List_1 = [objeto,cantidad,counter]
+            data = data.append(pd.Series(List_1, index=data.columns), ignore_index=True)
+            print(data)
+            add = False
+        elif counter >= 55 and add == True:
+            print("Almacenamiento completo")
+            add = False
+            
+        counter = counter + 1
 
-# Define some colours
+    return data
+
+
+# Definicion de Variables
 R = (255, 0, 0)
 G = (0, 255, 0)
 W = (255, 255, 255)
 A = (0, 0, 0)
 
-# Set up where each colour will display
+
 steve_pixels = [
     G, G, G, G, G, G, G, G,
     G, W, G, G, W, G, G, W,
@@ -24,22 +39,14 @@ steve_pixels = [
     W, W, W, W, W, W, W, W
 ]
 
-counter = 0
 
-steve_pixels[Dic1[2]] = R
-steve_pixels[Dic2[2]] = R
+data = pd.read_csv('datos.csv') #Leo datos y actualizo
 
-sense.set_pixels(steve_pixels)  #Primero se ponen en este color
+for i in data.values:       #Recorro todos las posiciones de objetos de la lista
+    steve_pixels[i[2]] = R 
 
-while(1):
-    if Dic1[0] == "Agua":
-        if apagar == True:
-            steve_pixels[Dic1[2]] = R
-            apagar = False
-        else:
-            steve_pixels[Dic1[2]] = A
-            apagar = True
+new_data = Add("Manzana", 150, data)
+new_data.to_csv('datos.csv', index=False)
     
-    sleep(1)
-    sense.set_pixels(steve_pixels)  #Luego todos rojos
-
+    
+sense.set_pixels(steve_pixels)  #Pinto el mapa
